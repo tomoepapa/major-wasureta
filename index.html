@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="定規やメジャーがないときに、身近な物や体の部位でおおよその長さを測れる無料ツールです。">
+  <meta name="theme-color" content="#0f2a44">
+  <link rel="icon" type="image/png" href="assets/major-icon.png">
+  <link rel="apple-touch-icon" href="assets/major-icon.png">
+  <title>メジャー忘れた！ | 今あるもので、だいたい測れる。</title>
+  <style>
+    :root {
+      --paper: #f7f4ed;
+      --surface: #ffffff;
+      --navy: #0f2a44;
+      --navy-soft: #e9eef3;
+      --orange: #f47c20;
+      --orange-dark: #c95d0f;
+      --ink: #1c2833;
+      --muted: #637081;
+      --line: #d7dde3;
+      --shadow: 0 1px 3px rgba(15, 42, 68, 0.06);
+      --radius: 12px;
+      --control-radius: 10px;
+      --card-width: 680px;
+      --space-sm: 8px;
+      --space-md: 14px;
+      --space-lg: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+      line-height: 1.55;
+    }
+
+    button, input, select { font: inherit; }
+    button, select { cursor: pointer; }
+    h1, h2, h3, p { margin-top: 0; }
+
+    .main-inner {
+      width: min(100% - 28px, 1040px);
+      margin-inline: auto;
+    }
+
+    .hero { padding: 18px 0 14px; }
+
+    .hero-layout {
+      display: grid;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .hero-layout > *,
+    .hero-copy,
+    .tool-panel { min-width: 0; }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .site-logo {
+      display: inline-grid;
+      justify-items: start;
+      gap: 0;
+      margin-bottom: 6px;
+    }
+
+    .site-logo img {
+      display: block;
+      width: min(142px, 42vw);
+      height: auto;
+      object-fit: contain;
+    }
+
+    h1 {
+      margin-bottom: 2px;
+      max-width: 100%;
+      color: var(--navy);
+      font-size: clamp(1.7rem, 6.4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .catchcopy {
+      margin-bottom: 0;
+      color: var(--ink);
+      font-size: clamp(0.98rem, 3.4vw, 1.16rem);
+      font-weight: 900;
+    }
+
+    .hero-intro {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .scene-title {
+      margin: 16px 0 6px;
+      color: var(--navy);
+      font-size: 0.86rem;
+      font-weight: 900;
+    }
+
+    .scene-tags {
+      display: grid;
+      gap: 3px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .scene-tags li {
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .tool-panel,
+    .result-section,
+    .notice {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .tool-panel {
+      padding: 18px 16px;
+    }
+
+    .tool-panel--measure {
+      width: 100%;
+      max-width: var(--card-width);
+      margin-inline: auto;
+    }
+
+    .tool-panel--reverse {
+      max-width: var(--card-width);
+      margin: 14px auto;
+      overflow: hidden;
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    h2 {
+      margin-bottom: 0;
+      color: var(--navy);
+      font-size: 1.16rem;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .quick-picks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+      margin: 0 0 var(--space-md);
+    }
+
+    .quick-pick {
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--control-radius);
+      background: #fff;
+      color: var(--navy);
+      font-size: 0.86rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .quick-pick.is-selected {
+      border-color: var(--orange);
+      background: #fff3e8;
+      color: var(--orange-dark);
+    }
+
+    .field-grid {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: var(--space-sm);
+      color: var(--navy);
+      font-size: 0.95rem;
+      font-weight: 900;
+    }
+
+    input, select {
+      width: 100%;
+      min-height: 56px;
+      padding: 12px 14px;
+      border: 1px solid #b9c4cf;
+      border-radius: var(--control-radius);
+      background: #fff;
+      color: var(--ink);
+      font-size: 1.08rem;
+    }
+
+    input:focus, select:focus, button:focus-visible, summary:focus-visible {
+      outline: 3px solid rgba(244, 124, 32, 0.22);
+      outline-offset: 2px;
+      border-color: var(--orange);
+    }
+
+    .unit-input { position: relative; }
+    .unit-input input { padding-right: 52px; }
+
+    .unit-input span {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 900;
+      pointer-events: none;
+    }
+
+    .action-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 58px;
+      margin-top: var(--space-md);
+      padding: 12px 18px;
+      border: 0;
+      border-radius: var(--control-radius);
+      background: var(--orange);
+      color: #fff;
+      font-size: 1.12rem;
+      font-weight: 900;
+      box-shadow: none;
+      transition: transform 0.15s ease;
+    }
+
+    .action-button:hover { transform: translateY(-1px); }
+    .action-button:active { transform: translateY(1px); }
+
+    .action-button--secondary { background: var(--navy); }
+
+    .mini-example {
+      display: inline-grid;
+      gap: 1px;
+      margin-top: var(--space-md);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .mini-example strong {
+      color: var(--navy);
+      font-size: 0.9rem;
+    }
+
+    .result-section {
+      display: none;
+      max-width: var(--card-width);
+      margin: 14px auto;
+      padding: 24px 18px;
+      text-align: center;
+    }
+
+    .result-section.is-active, .result-section.is-error {
+      display: block;
+      animation: result-pop 0.3s ease;
+    }
+
+    .result-label {
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .result-value {
+      margin-bottom: 10px;
+      color: var(--orange-dark);
+      font-size: clamp(2.7rem, 13vw, 4.7rem);
+      font-weight: 900;
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .result-detail {
+      margin-bottom: var(--space-lg);
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .copy-button {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      margin: 0 0 var(--space-lg);
+      padding: 9px 16px;
+      border: 1px solid var(--navy);
+      border-radius: 999px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .result-section.is-active .copy-button { display: inline-flex; }
+    .result-meter-wrap { margin-top: var(--space-md); text-align: left; }
+
+    .result-meter-title, .conversion-title, .example-title {
+      margin-bottom: var(--space-sm);
+      color: var(--navy);
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .result-meter {
+      position: relative;
+      height: 34px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--control-radius);
+      background-color: #f8fafc;
+      background-image: repeating-linear-gradient(90deg, transparent 0 17px, rgba(15, 42, 68, 0.34) 17px 19px);
+    }
+
+    .result-meter span {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: var(--meter-width, 0%);
+      background: rgba(244, 124, 32, 0.72);
+      border-right: 3px solid var(--orange-dark);
+      transition: width 0.45s ease;
+    }
+
+    .meter-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .conversion-list, .example-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0 0;
+      padding: 0;
+      list-style: none;
+      text-align: left;
+    }
+
+    .conversion-list li, .example-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding: 10px 12px;
+      border-radius: var(--control-radius);
+      background: var(--navy-soft);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .example-list li {
+      display: block;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .conversion-list b {
+      color: var(--orange-dark);
+      white-space: nowrap;
+    }
+
+    .result-section.is-error {
+      border-color: var(--orange);
+      background: #fff;
+    }
+
+    .result-section.is-error .copy-button,
+    .result-section.is-error .result-meter-wrap,
+    .result-section.is-error .conversion-wrap,
+    .result-section.is-error .example-wrap { display: none; }
+
+    .reverse-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      color: var(--navy);
+      font-weight: 900;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .reverse-summary::-webkit-details-marker { display: none; }
+
+    .reverse-summary::after {
+      content: "+";
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--navy-soft);
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    details[open] .reverse-summary::after { content: "-"; }
+    .reverse-content { padding: 0 16px 16px; }
+
+    @keyframes result-pop {
+      0% { transform: scale(0.985); }
+      70% { transform: scale(1.008); }
+      100% { transform: scale(1); }
+    }
+
+    .notice {
+      max-width: var(--card-width);
+      margin: 14px auto 18px;
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .notice strong { color: var(--navy); }
+
+    @media (min-width: 980px) {
+      .hero { padding-top: 22px; }
+
+      .hero-layout {
+        grid-template-columns: minmax(280px, 1fr) minmax(0, var(--card-width));
+        gap: 24px;
+      }
+
+      .tool-panel { padding: var(--space-lg); }
+      .scene-tags { grid-template-columns: 1fr; }
+      .quick-picks { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+      .tool-panel--measure .field-grid,
+      .tool-panel--reverse .field-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .result-section { padding: 28px 32px; }
+      .conversion-list, .example-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .reverse-content { padding: 0 var(--space-lg) var(--space-lg); }
+    }
+
+    @media (max-width: 979px) {
+      .site-logo img { width: min(120px, 38vw); }
+
+      .quick-picks {
+        display: flex;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+
+      .quick-picks::-webkit-scrollbar { display: none; }
+
+      .quick-pick {
+        flex: 0 0 auto;
+        min-height: 40px;
+        white-space: nowrap;
+        font-size: 0.82rem;
+      }
+
+      .hero-intro { font-size: 0.82rem; }
+      .tool-panel--measure { max-width: 100%; padding-top: 14px; }
+    }
+
+    @media (max-width: 380px) {
+      .main-inner { width: min(100% - 20px, 1040px); }
+      .hero { padding-top: 12px; }
+      h1 { font-size: clamp(1.58rem, 7.8vw, 1.86rem); }
+      .site-logo img { width: min(118px, 40vw); }
+      .tool-panel { padding: 15px 13px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main id="top">
+    <div class="main-inner">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <p class="eyebrow">メジャーがない時のかんたん測定</p>
+            <div class="site-logo">
+              <img src="assets/major-logo.png" alt="黄色い定規のロゴ" width="640" height="427">
+              <h1 id="page-title">メジャー忘れた！</h1>
+            </div>
+            <p class="catchcopy">今あるもので、だいたい測れる。</p>
+            <p class="hero-intro">手のひら・ペットボトル・カードなど、今ある物を選んで数を入れるだけ。</p>
+            <p class="scene-title">こんな時に便利</p>
+            <ul class="scene-tags" aria-label="利用シーン">
+              <li>📦 フリマ出品前</li>
+              <li>🪑 家具購入</li>
+              <li>📏 メジャーを忘れた時</li>
+            </ul>
+          </div>
+
+          <section class="tool-panel tool-panel--measure" aria-labelledby="measure-title">
+            <div class="panel-heading">
+              <h2 id="measure-title">今ある物で測る</h2>
+            </div>
+
+            <div class="quick-picks quick-picks--measure" aria-label="よく使う基準物">
+              <button class="quick-pick" type="button" data-item="手のひら">✋ 手のひら</button>
+              <button class="quick-pick" type="button" data-item="スマートフォン">📱 スマホ</button>
+              <button class="quick-pick" type="button" data-item="クレジットカード">💳 クレカ</button>
+              <button class="quick-pick" type="button" data-item="500mlペットボトル">🧴 ペットボトル</button>
+            </div>
+
+            <form id="measure-form" novalidate>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="measure-object">今ある物は？</label>
+                  <select id="measure-object"></select>
+                </div>
+                <div class="field">
+                  <label for="measure-count" id="measure-count-label">何枚分ですか？</label>
+                  <div class="unit-input">
+                    <input id="measure-count" type="number" min="0.5" step="0.5" inputmode="decimal" placeholder="例：2.5枚" required>
+                    <span id="measure-unit">枚</span>
+                  </div>
+                </div>
+              </div>
+              <button class="action-button" type="submit">長さを測る</button>
+            </form>
+            <div class="mini-example" aria-hidden="true">
+              <span>手のひら3枚</span>
+              <span>↓</span>
+              <strong>約54cm</strong>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="result-section" aria-labelledby="result-heading" aria-live="polite">
+        <p class="result-label" id="result-heading">測ってみると</p>
+        <p class="result-value" id="result-value">📏 約 -- cm</p>
+        <p class="result-detail" id="result-detail">数値を入力して計算してください。</p>
+        <button class="copy-button" id="copy-result" type="button">結果をコピー</button>
+
+        <div class="example-wrap">
+          <p class="example-title">💡 イメージすると…</p>
+          <ul class="example-list" id="example-list"></ul>
+        </div>
+
+        <div class="conversion-wrap">
+          <p class="conversion-title">身近な物で言うと</p>
+          <ul class="conversion-list" id="conversion-list"></ul>
+        </div>
+
+        <div class="result-meter-wrap" aria-hidden="true">
+          <p class="result-meter-title">目安の位置</p>
+          <div class="result-meter"><span></span></div>
+          <div class="meter-labels">
+            <span>0cm</span><span>50cm</span><span>100cm</span>
+          </div>
+        </div>
+      </section>
+
+      <details class="tool-panel tool-panel--reverse">
+        <summary class="reverse-summary">長さから比べる</summary>
+        <div class="reverse-content">
+          <div class="quick-picks quick-picks--reverse" aria-label="長さから比べる基準物">
+            <button class="quick-pick" type="button" data-item="手のひら">✋ 手のひら</button>
+            <button class="quick-pick" type="button" data-item="スマートフォン">📱 スマホ</button>
+            <button class="quick-pick" type="button" data-item="クレジットカード">💳 クレカ</button>
+            <button class="quick-pick" type="button" data-item="500mlペットボトル">🧴 ペットボトル</button>
+          </div>
+          <form id="reverse-form" novalidate>
+            <div class="field-grid">
+              <div class="field">
+                <label for="reverse-length">知りたい長さ</label>
+                <div class="unit-input">
+                  <input id="reverse-length" type="number" min="0.5" step="0.5" inputmode="decimal" placeholder="例：54" required>
+                  <span>cm</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="reverse-object">何で比べる？</label>
+                <select id="reverse-object"></select>
+              </div>
+            </div>
+            <button class="action-button action-button--secondary" type="submit">何個分か調べる</button>
+          </form>
+        </div>
+      </details>
+
+      <aside class="notice">
+        <strong>注意：</strong>このサイトは正確な測定器ではなく、おおよその長さを知るための簡易ツールです。体の部位には個人差があります。
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const referenceItems = [
+      { name: '手のひら', length: 18, unit: '枚分', countUnit: '枚', placeholder: '例：2.5枚' },
+      { name: '指', length: 7, unit: '本分', countUnit: '本', placeholder: '例：4本' },
+      { name: '肘から指先', length: 45, unit: '本分', countUnit: '本', placeholder: '例：1本' },
+      { name: '肩幅', length: 40, unit: '幅分', countUnit: '幅', placeholder: '例：1.5幅' },
+      { name: '歩幅', length: 70, unit: '歩分', countUnit: '歩', placeholder: '例：6歩' },
+      { name: '500mlペットボトル', length: 21, unit: '本分', countUnit: '本', placeholder: '例：1.5本' },
+      { name: 'クレジットカード', length: 8.56, unit: '枚分', countUnit: '枚', placeholder: '例：5枚' },
+      { name: 'A4用紙の長辺', length: 29.7, unit: '枚分', countUnit: '枚', placeholder: '例：2枚' },
+      { name: 'A4用紙の短辺', length: 21, unit: '枚分', countUnit: '枚', placeholder: '例：2枚' },
+      { name: 'スマートフォン', length: 15, unit: '台分', countUnit: '台', placeholder: '例：3台' },
+      { name: '千円札の長辺', length: 15, unit: '枚分', countUnit: '枚', placeholder: '例：3枚' },
+      { name: 'ボールペン', length: 14, unit: '本分', countUnit: '本', placeholder: '例：4本' }
+    ];
+
+    const measureForm = document.getElementById('measure-form');
+    const reverseForm = document.getElementById('reverse-form');
+    const measureObject = document.getElementById('measure-object');
+    const reverseObject = document.getElementById('reverse-object');
+    const measureCount = document.getElementById('measure-count');
+    const measureCountLabel = document.getElementById('measure-count-label');
+    const measureUnit = document.getElementById('measure-unit');
+    const reverseLength = document.getElementById('reverse-length');
+    const resultSection = document.querySelector('.result-section');
+    const resultValue = document.getElementById('result-value');
+    const resultDetail = document.getElementById('result-detail');
+    const conversionList = document.getElementById('conversion-list');
+    const exampleList = document.getElementById('example-list');
+    const copyButton = document.getElementById('copy-result');
+    const measureQuickPickButtons = document.querySelectorAll('.quick-picks--measure .quick-pick');
+    const reverseQuickPickButtons = document.querySelectorAll('.quick-picks--reverse .quick-pick');
+    let currentResultText = '';
+
+    function populateSelect(selectElement) {
+      referenceItems.forEach(function (item, index) {
+        const option = document.createElement('option');
+        option.value = String(index);
+        option.textContent = item.name + '（' + item.length + 'cm）';
+        selectElement.appendChild(option);
+      });
+    }
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat('ja-JP', {
+        maximumFractionDigits: 1
+      }).format(Number(value.toFixed(1)));
+    }
+
+    function formatCount(value) {
+      return new Intl.NumberFormat('ja-JP', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }).format(Number(value.toFixed(1)));
+    }
+
+    function updateMeter(length) {
+      const position = Math.min(Math.max(length, 0), 100);
+      resultSection.style.setProperty('--meter-width', position + '%');
+    }
+
+    function getExamples(length) {
+      if (length < 10) {
+        return ['クレジットカードの短辺くらいです', '指1本より少し長いくらいです', '小物の幅を測るときの目安です'];
+      }
+      if (length < 25) {
+        return ['スマートフォンくらいの長さです', '500mlペットボトルくらいです', 'A4用紙の短辺くらいです'];
+      }
+      if (length < 45) {
+        return ['ノートPCくらいの幅です', '一般的な椅子の座面くらいです', 'A4用紙の長辺より少し長いくらいです'];
+      }
+      if (length < 70) {
+        return ['宅急便60サイズ程度です', '小さめの棚の幅くらいです', '肘から指先くらいです'];
+      }
+      if (length < 120) {
+        return ['大きめのポスターくらいです', '歩幅1〜2歩くらいです', '机の横幅に近いくらいです'];
+      }
+      return ['家具の幅を確認したい長さです', '宅急便の大型サイズを考える長さです', '部屋のスペース確認向きの長さです'];
+    }
+
+    function updateExamples(length) {
+      exampleList.innerHTML = '';
+      getExamples(length).forEach(function (text) {
+        const listItem = document.createElement('li');
+        listItem.textContent = text;
+        exampleList.appendChild(listItem);
+      });
+    }
+
+    function updateConversions(length, selectedItem) {
+      const conversionItems = referenceItems
+        .filter(function (item) {
+          return item.name !== selectedItem.name;
+        })
+        .slice(0, 3);
+
+      conversionList.innerHTML = '';
+
+      conversionItems.forEach(function (item) {
+        const count = length / item.length;
+        const listItem = document.createElement('li');
+        listItem.innerHTML = '<span>' + item.name + '</span><b>約' + formatNumber(count) + item.unit + '</b>';
+        conversionList.appendChild(listItem);
+      });
+    }
+
+    function setQuickPickState(buttons, itemName) {
+      buttons.forEach(function (button) {
+        button.classList.toggle('is-selected', button.dataset.item === itemName);
+      });
+    }
+
+    function selectItemByName(itemName, selectElement, buttons) {
+      const index = referenceItems.findIndex(function (item) {
+        return item.name === itemName;
+      });
+
+      if (index >= 0) {
+        selectElement.value = String(index);
+        setQuickPickState(buttons, itemName);
+      }
+    }
+
+    function updateMeasureInputGuide() {
+      const item = referenceItems[Number(measureObject.value)];
+      measureCountLabel.textContent = '何' + item.countUnit + '分ですか？';
+      measureUnit.textContent = item.countUnit;
+      measureCount.placeholder = item.placeholder;
+    }
+    function showError(message, inputElement) {
+      resultSection.classList.remove('is-active');
+      resultSection.classList.add('is-error');
+      resultValue.textContent = '入力を確認';
+      resultDetail.textContent = message;
+      conversionList.innerHTML = '';
+      exampleList.innerHTML = '';
+      currentResultText = '';
+      updateMeter(0);
+      resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      inputElement.focus();
+    }
+
+    function showResult(mainText, detailText, length, item, copyText) {
+      resultSection.classList.remove('is-active', 'is-error');
+      void resultSection.offsetWidth;
+      resultSection.classList.add('is-active');
+      resultValue.textContent = mainText;
+      resultDetail.textContent = detailText;
+      currentResultText = copyText;
+      copyButton.textContent = '結果をコピー';
+      updateMeter(length);
+      updateExamples(length);
+      updateConversions(length, item);
+      resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function copyResultText() {
+      if (!currentResultText) return;
+
+      const done = function () {
+        copyButton.textContent = 'コピーしました！';
+        setTimeout(function () {
+          copyButton.textContent = '結果をコピー';
+        }, 1600);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentResultText).then(done).catch(function () {
+          window.prompt('コピーしてください', currentResultText);
+        });
+        return;
+      }
+
+      window.prompt('コピーしてください', currentResultText);
+    }
+
+    populateSelect(measureObject);
+    populateSelect(reverseObject);
+    setQuickPickState(measureQuickPickButtons, referenceItems[Number(measureObject.value)].name);
+    setQuickPickState(reverseQuickPickButtons, referenceItems[Number(reverseObject.value)].name);
+    updateMeasureInputGuide();
+
+    measureQuickPickButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        selectItemByName(button.dataset.item, measureObject, measureQuickPickButtons);
+        updateMeasureInputGuide();
+      });
+    });
+
+    reverseQuickPickButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        selectItemByName(button.dataset.item, reverseObject, reverseQuickPickButtons);
+      });
+    });
+
+    measureObject.addEventListener('change', function () {
+      const item = referenceItems[Number(measureObject.value)];
+      setQuickPickState(measureQuickPickButtons, item.name);
+      updateMeasureInputGuide();
+    });
+
+    reverseObject.addEventListener('change', function () {
+      const item = referenceItems[Number(reverseObject.value)];
+      setQuickPickState(reverseQuickPickButtons, item.name);
+    });
+
+    copyButton.addEventListener('click', copyResultText);
+
+    measureForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const count = Number(measureCount.value);
+
+      if (!Number.isFinite(count) || count <= 0) {
+        showError('0より大きい数を入力してください。0.5単位でも入力できます。', measureCount);
+        return;
+      }
+
+      const item = referenceItems[Number(measureObject.value)];
+      const approximateLength = item.length * count;
+      const formattedLength = formatNumber(approximateLength);
+      showResult(
+        '📏 約 ' + formattedLength + ' cm',
+        item.name + '（' + item.length + 'cm）の約' + formatNumber(count) + item.countUnit + '分です。',
+        approximateLength,
+        item,
+        'おおよその長さ：約' + formattedLength + 'cm'
+      );
+    });
+
+    reverseForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const length = Number(reverseLength.value);
+
+      if (!Number.isFinite(length) || length <= 0) {
+        showError('長さに0より大きい数を入力してください。0.5cm単位でも入力できます。', reverseLength);
+        return;
+      }
+
+      const item = referenceItems[Number(reverseObject.value)];
+      const count = length / item.length;
+      showResult(
+        '約 ' + formatCount(count) + item.unit,
+        formatNumber(length) + 'cmは、' + item.name + '（' + item.length + 'cm）で測った場合の目安です。',
+        length,
+        item,
+        'おおよその長さ：約' + formatNumber(length) + 'cm'
+      );
+    });
+  </script>
+</body>
+
+</html>
