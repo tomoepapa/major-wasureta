@@ -519,13 +519,13 @@
             <h1 id="page-title">メジャー忘れた！</h1>
           </div>
           <p class="catchcopy">今あるもので、だいたい測れる。</p>
-          <p class="hero-intro">今ある物を選んで、数を入れるだけ。</p>
+          <p class="hero-intro">手のひらやスマホを選んで、数を入れるだけ。</p>
         </div>
       </section>
 
       <section class="tool-panel tool-panel--measure" aria-labelledby="measure-title">
         <div class="panel-heading">
-          <h2 id="measure-title">今ある物で測る</h2>
+          <h2 id="measure-title">何で測る？</h2>
         </div>
 
         <div class="quick-picks quick-picks--measure" aria-label="よく使う基準物">
@@ -544,7 +544,7 @@
             <div class="field">
               <label for="measure-count" id="measure-count-label">何枚分ですか？</label>
               <div class="unit-input">
-                <input id="measure-count" type="number" min="0.5" step="0.5" inputmode="decimal" placeholder="例：2.5枚" required>
+                <input id="measure-count" type="number" min="0.5" step="0.5" inputmode="decimal" placeholder="例：3" required>
                 <span id="measure-unit">枚</span>
               </div>
             </div>
@@ -627,18 +627,18 @@
 
   <script>
     const referenceItems = [
-      { name: '手のひら', length: 18, unit: '枚分', countUnit: '枚', placeholder: '例：2.5枚' },
-      { name: '指', length: 7, unit: '本分', countUnit: '本', placeholder: '例：4本' },
-      { name: '肘から指先', length: 45, unit: '本分', countUnit: '本', placeholder: '例：1本' },
-      { name: '肩幅', length: 40, unit: '幅分', countUnit: '幅', placeholder: '例：1.5幅' },
-      { name: '歩幅', length: 70, unit: '歩分', countUnit: '歩', placeholder: '例：6歩' },
-      { name: '500mlペットボトル', length: 21, unit: '本分', countUnit: '本', placeholder: '例：1.5本' },
-      { name: 'クレジットカード', length: 8.56, unit: '枚分', countUnit: '枚', placeholder: '例：5枚' },
-      { name: 'A4用紙の長辺', length: 29.7, unit: '枚分', countUnit: '枚', placeholder: '例：2枚' },
-      { name: 'A4用紙の短辺', length: 21, unit: '枚分', countUnit: '枚', placeholder: '例：2枚' },
-      { name: 'スマートフォン', length: 15, unit: '台分', countUnit: '台', placeholder: '例：3台' },
-      { name: '千円札の長辺', length: 15, unit: '枚分', countUnit: '枚', placeholder: '例：3枚' },
-      { name: 'ボールペン', length: 14, unit: '本分', countUnit: '本', placeholder: '例：4本' }
+      { name: '手のひら', length: 18, unit: '枚分', countUnit: '枚', placeholder: '例：3' },
+      { name: '指', length: 7, unit: '本分', countUnit: '本', placeholder: '例：3' },
+      { name: '肘から指先', length: 45, unit: '本分', countUnit: '本', placeholder: '例：3' },
+      { name: '肩幅', length: 40, unit: '幅分', countUnit: '幅', placeholder: '例：3' },
+      { name: '歩幅', length: 70, unit: '歩分', countUnit: '歩', placeholder: '例：3' },
+      { name: '500mlペットボトル', length: 21, unit: '本分', countUnit: '本', placeholder: '例：3' },
+      { name: 'クレジットカード', length: 8.56, unit: '枚分', countUnit: '枚', placeholder: '例：3' },
+      { name: 'A4用紙の長辺', length: 29.7, unit: '枚分', countUnit: '枚', placeholder: '例：3' },
+      { name: 'A4用紙の短辺', length: 21, unit: '枚分', countUnit: '枚', placeholder: '例：3' },
+      { name: 'スマートフォン', length: 15, unit: '台分', countUnit: '台', placeholder: '例：3' },
+      { name: '千円札の長辺', length: 15, unit: '枚分', countUnit: '枚', placeholder: '例：3' },
+      { name: 'ボールペン', length: 14, unit: '本分', countUnit: '本', placeholder: '例：3' }
     ];
 
     const measureForm = document.getElementById('measure-form');
