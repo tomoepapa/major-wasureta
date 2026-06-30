@@ -20,13 +20,14 @@
       --ink: #1c2833;
       --muted: #637081;
       --line: #d7dde3;
-      --shadow: 0 1px 3px rgba(15, 42, 68, 0.06);
+      --shadow: 0 1px 2px rgba(15, 42, 68, 0.04);
       --radius: 12px;
       --control-radius: 10px;
-      --card-width: 680px;
+      --content-width: 760px;
+      --card-width: 720px;
       --space-sm: 8px;
       --space-md: 14px;
-      --space-lg: 20px;
+      --space-lg: 22px;
     }
 
     * { box-sizing: border-box; }
@@ -47,48 +48,40 @@
     h1, h2, h3, p { margin-top: 0; }
 
     .main-inner {
-      width: min(100% - 28px, 1040px);
+      width: min(100% - 28px, var(--content-width));
       margin-inline: auto;
+      padding-bottom: 22px;
     }
 
-    .hero { padding: 18px 0 14px; }
-
-    .hero-layout {
-      display: grid;
-      gap: 18px;
-      align-items: start;
+    .hero {
+      padding: 24px 0 16px;
+      text-align: center;
     }
 
-    .hero-layout > *,
-    .hero-copy,
-    .tool-panel { min-width: 0; }
-
-    .eyebrow {
-      margin: 0 0 6px;
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 900;
-    }
+    .hero-copy { min-width: 0; }
 
     .site-logo {
-      display: inline-grid;
-      justify-items: start;
-      gap: 0;
-      margin-bottom: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      max-width: 100%;
+      margin-bottom: 5px;
     }
 
     .site-logo img {
       display: block;
-      width: min(142px, 42vw);
+      width: clamp(50px, 11vw, 68px);
       height: auto;
       object-fit: contain;
+      flex: 0 0 auto;
     }
 
     h1 {
-      margin-bottom: 2px;
+      margin: 0;
       max-width: 100%;
       color: var(--navy);
-      font-size: clamp(1.7rem, 6.4vw, 3rem);
+      font-size: clamp(1.86rem, 7.6vw, 2.9rem);
       line-height: 1.05;
       letter-spacing: 0;
       white-space: nowrap;
@@ -97,44 +90,24 @@
     .catchcopy {
       margin-bottom: 0;
       color: var(--ink);
-      font-size: clamp(0.98rem, 3.4vw, 1.16rem);
+      font-size: clamp(0.98rem, 3.5vw, 1.14rem);
       font-weight: 900;
     }
 
     .hero-intro {
-      margin: 8px 0 0;
+      margin: 5px 0 0;
       color: var(--muted);
       font-size: 0.86rem;
       font-weight: 700;
     }
 
-    .scene-title {
-      margin: 16px 0 6px;
-      color: var(--navy);
-      font-size: 0.86rem;
-      font-weight: 900;
-    }
-
-    .scene-tags {
-      display: grid;
-      gap: 3px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      color: var(--muted);
-      font-size: 0.82rem;
-      font-weight: 800;
-    }
-
-    .scene-tags li {
-      padding: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
     .tool-panel,
     .result-section,
+    .scene-panel,
     .notice {
+      width: 100%;
+      max-width: var(--card-width);
+      margin-inline: auto;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--surface);
@@ -142,18 +115,15 @@
     }
 
     .tool-panel {
-      padding: 18px 16px;
+      padding: 20px 18px;
     }
 
     .tool-panel--measure {
-      width: 100%;
-      max-width: var(--card-width);
-      margin-inline: auto;
+      margin-top: 0;
     }
 
     .tool-panel--reverse {
-      max-width: var(--card-width);
-      margin: 14px auto;
+      margin-top: 16px;
       overflow: hidden;
     }
 
@@ -161,7 +131,7 @@
       display: flex;
       align-items: center;
       gap: var(--space-sm);
-      margin-bottom: var(--space-md);
+      margin-bottom: 12px;
     }
 
     h2 {
@@ -174,14 +144,14 @@
 
     .quick-picks {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: var(--space-sm);
-      margin: 0 0 var(--space-md);
+      margin: 0 0 16px;
     }
 
     .quick-pick {
-      min-height: 40px;
-      padding: 8px 10px;
+      min-height: 44px;
+      padding: 9px 10px;
       border: 1px solid var(--line);
       border-radius: var(--control-radius);
       background: #fff;
@@ -189,12 +159,14 @@
       font-size: 0.86rem;
       font-weight: 900;
       text-align: center;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     }
 
     .quick-pick.is-selected {
       border-color: var(--orange);
       background: #fff3e8;
       color: var(--orange-dark);
+      box-shadow: inset 0 0 0 1px rgba(244, 124, 32, 0.22);
     }
 
     .field-grid {
@@ -246,7 +218,7 @@
       justify-content: center;
       width: 100%;
       min-height: 58px;
-      margin-top: var(--space-md);
+      margin-top: 16px;
       padding: 12px 18px;
       border: 0;
       border-radius: var(--control-radius);
@@ -260,28 +232,39 @@
 
     .action-button:hover { transform: translateY(-1px); }
     .action-button:active { transform: translateY(1px); }
-
     .action-button--secondary { background: var(--navy); }
 
     .mini-example {
-      display: inline-grid;
-      gap: 1px;
-      margin-top: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0 0;
+      padding: 0;
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.84rem;
       font-weight: 800;
       text-align: center;
     }
 
+    .mini-example::before {
+      content: "例：";
+      color: var(--muted);
+    }
+
+    .mini-example span:nth-child(2) {
+      color: #9aa5b1;
+    }
+
     .mini-example strong {
-      color: var(--navy);
-      font-size: 0.9rem;
+      color: var(--orange-dark);
+      font-size: 0.92rem;
     }
 
     .result-section {
       display: none;
-      max-width: var(--card-width);
-      margin: 14px auto;
+      margin-top: 16px;
       padding: 24px 18px;
       text-align: center;
     }
@@ -415,8 +398,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 14px 16px;
+      gap: 7px;
+      padding: 15px 16px;
       color: var(--navy);
       font-weight: 900;
       cursor: pointer;
@@ -440,6 +423,35 @@
     details[open] .reverse-summary::after { content: "-"; }
     .reverse-content { padding: 0 16px 16px; }
 
+    .scene-panel {
+      margin-top: 16px;
+      padding: 15px 16px;
+    }
+
+    .scene-title {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .scene-tags {
+      display: grid;
+      gap: 4px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .scene-tags li {
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
     @keyframes result-pop {
       0% { transform: scale(0.985); }
       70% { transform: scale(1.008); }
@@ -447,8 +459,7 @@
     }
 
     .notice {
-      max-width: var(--card-width);
-      margin: 14px auto 18px;
+      margin-top: 16px;
       padding: 12px 14px;
       color: var(--muted);
       font-size: 0.82rem;
@@ -457,59 +468,34 @@
 
     .notice strong { color: var(--navy); }
 
-    @media (min-width: 980px) {
-      .hero { padding-top: 22px; }
-
-      .hero-layout {
-        grid-template-columns: minmax(280px, 1fr) minmax(0, var(--card-width));
-        gap: 24px;
-      }
-
-      .tool-panel { padding: var(--space-lg); }
-      .scene-tags { grid-template-columns: 1fr; }
-      .quick-picks { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-      .tool-panel--measure .field-grid,
-      .tool-panel--reverse .field-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .result-section { padding: 28px 32px; }
+    @media (min-width: 720px) {
+      .main-inner { width: min(100% - 40px, var(--content-width)); }
+      .hero { padding-top: 28px; }
+      .tool-panel { padding: 22px; }
+      .field-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .conversion-list, .example-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .reverse-content { padding: 0 var(--space-lg) var(--space-lg); }
+      .scene-tags { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .result-section { padding: 28px 32px; }
     }
 
-    @media (max-width: 979px) {
-      .site-logo img { width: min(120px, 38vw); }
-
-      .quick-picks {
-        display: flex;
-        width: 100%;
-        max-width: 100%;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        scrollbar-width: none;
-      }
-
-      .quick-picks::-webkit-scrollbar { display: none; }
-
-      .quick-pick {
-        flex: 0 0 auto;
-        min-height: 40px;
-        white-space: nowrap;
-        font-size: 0.82rem;
-      }
-
+    @media (max-width: 560px) {
+      .main-inner { width: min(100% - 24px, var(--content-width)); }
+      .hero { padding: 18px 0 14px; }
+      .site-logo { gap: 6px; }
+      .site-logo img { width: 48px; }
+      h1 { font-size: clamp(1.58rem, 7.8vw, 2.08rem); }
       .hero-intro { font-size: 0.82rem; }
-      .tool-panel--measure { max-width: 100%; padding-top: 14px; }
+      .quick-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quick-pick { min-height: 46px; font-size: 0.84rem; }
+      .tool-panel { padding: 18px 14px; }
     }
 
-    @media (max-width: 380px) {
-      .main-inner { width: min(100% - 20px, 1040px); }
-      .hero { padding-top: 12px; }
-      h1 { font-size: clamp(1.58rem, 7.8vw, 1.86rem); }
-      .site-logo img { width: min(118px, 40vw); }
-      .tool-panel { padding: 15px 13px; }
+    @media (max-width: 360px) {
+      .main-inner { width: min(100% - 18px, var(--content-width)); }
+      .site-logo img { width: 42px; }
+      h1 { font-size: 1.44rem; }
+      .quick-pick { font-size: 0.8rem; padding-inline: 8px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -527,59 +513,50 @@
   <main id="top">
     <div class="main-inner">
       <section class="hero" aria-labelledby="page-title">
-        <div class="hero-layout">
-          <div class="hero-copy">
-            <div class="site-logo">
-              <img src="assets/major-logo.png" alt="黄色い定規のロゴ" width="640" height="427">
-              <h1 id="page-title">メジャー忘れた！</h1>
-            </div>
-            <p class="catchcopy">今あるもので、だいたい測れる。</p>
-            <p class="hero-intro">手のひら・ペットボトル・カードなど、今ある物を選んで数を入れるだけ。</p>
-            <p class="scene-title">こんな時に便利</p>
-            <ul class="scene-tags" aria-label="利用シーン">
-              <li>📦 フリマ出品前</li>
-              <li>🪑 家具購入</li>
-              <li>📏 メジャーを忘れた時</li>
-            </ul>
+        <div class="hero-copy">
+          <div class="site-logo">
+            <img src="assets/major-logo.png" alt="黄色い定規のロゴ" width="640" height="427">
+            <h1 id="page-title">メジャー忘れた！</h1>
           </div>
-
-          <section class="tool-panel tool-panel--measure" aria-labelledby="measure-title">
-            <div class="panel-heading">
-              <h2 id="measure-title">今ある物で測る</h2>
-            </div>
-
-            <div class="quick-picks quick-picks--measure" aria-label="よく使う基準物">
-              <button class="quick-pick" type="button" data-item="手のひら">✋ 手のひら</button>
-              <button class="quick-pick" type="button" data-item="スマートフォン">📱 スマホ</button>
-              <button class="quick-pick" type="button" data-item="クレジットカード">💳 クレカ</button>
-              <button class="quick-pick" type="button" data-item="500mlペットボトル">🧴 ペットボトル</button>
-            </div>
-
-            <form id="measure-form" novalidate>
-              <div class="field-grid">
-                <div class="field">
-                  <label for="measure-object">今ある物は？</label>
-                  <select id="measure-object"></select>
-                </div>
-                <div class="field">
-                  <label for="measure-count" id="measure-count-label">何枚分ですか？</label>
-                  <div class="unit-input">
-                    <input id="measure-count" type="number" min="0.5" step="0.5" inputmode="decimal" placeholder="例：2.5枚" required>
-                    <span id="measure-unit">枚</span>
-                  </div>
-                </div>
-              </div>
-              <button class="action-button" type="submit">長さを測る</button>
-            </form>
-            <div class="mini-example" aria-hidden="true">
-              <span>手のひら3枚</span>
-              <span>↓</span>
-              <strong>約54cm</strong>
-            </div>
-          </section>
+          <p class="catchcopy">今あるもので、だいたい測れる。</p>
+          <p class="hero-intro">今ある物を選んで、数を入れるだけ。</p>
         </div>
       </section>
 
+      <section class="tool-panel tool-panel--measure" aria-labelledby="measure-title">
+        <div class="panel-heading">
+          <h2 id="measure-title">今ある物で測る</h2>
+        </div>
+
+        <div class="quick-picks quick-picks--measure" aria-label="よく使う基準物">
+          <button class="quick-pick" type="button" data-item="手のひら">✋ 手のひら</button>
+          <button class="quick-pick" type="button" data-item="スマートフォン">📱 スマホ</button>
+          <button class="quick-pick" type="button" data-item="クレジットカード">💳 クレカ</button>
+          <button class="quick-pick" type="button" data-item="500mlペットボトル">🧴 ペットボトル</button>
+        </div>
+
+        <form id="measure-form" novalidate>
+          <div class="field-grid">
+            <div class="field">
+              <label for="measure-object">今ある物は？</label>
+              <select id="measure-object"></select>
+            </div>
+            <div class="field">
+              <label for="measure-count" id="measure-count-label">何枚分ですか？</label>
+              <div class="unit-input">
+                <input id="measure-count" type="number" min="0.5" step="0.5" inputmode="decimal" placeholder="例：2.5枚" required>
+                <span id="measure-unit">枚</span>
+              </div>
+            </div>
+          </div>
+          <button class="action-button" type="submit">長さを測る</button>
+        </form>
+        <div class="mini-example" aria-hidden="true">
+          <span>手のひら3枚</span>
+          <span>↓</span>
+          <strong>約54cm</strong>
+        </div>
+      </section>
       <section class="result-section" aria-labelledby="result-heading" aria-live="polite">
         <p class="result-label" id="result-heading">測ってみると</p>
         <p class="result-value" id="result-value">📏 約 -- cm</p>
@@ -632,6 +609,15 @@
           </form>
         </div>
       </details>
+
+      <section class="scene-panel" aria-label="利用シーン">
+        <p class="scene-title">こんな時に便利</p>
+        <ul class="scene-tags">
+          <li>📦 フリマ出品前</li>
+          <li>🪑 家具購入</li>
+          <li>📏 メジャーを忘れた時</li>
+        </ul>
+      </section>
 
       <aside class="notice">
         <strong>注意：</strong>このサイトは正確な測定器ではなく、おおよその長さを知るための簡易ツールです。体の部位には個人差があります。
